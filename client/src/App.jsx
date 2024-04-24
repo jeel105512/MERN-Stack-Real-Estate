@@ -5,10 +5,12 @@ import SignIn from "./pages/SignIn";
 import SignUp from "./pages/SignUp";
 import About from "./pages/About";
 import Profile from "./pages/Profile";
+import Header from './components/Header/Header';
 
 export default function App() {
   return (
     <Router>
+      <Header />
       <Suspense fallback={<div>Loading...</div>}>
         {" "}
         <Routes>
