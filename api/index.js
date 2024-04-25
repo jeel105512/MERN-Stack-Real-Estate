@@ -2,6 +2,7 @@ import express from "express";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 
+import authRouter from "./routes/auth.route.js";
 import userRouter from "./routes/user.route.js";
 
 dotenv.config();
@@ -14,8 +15,12 @@ mongoose
 
 const app = express();
 
+// allow to send json to the server
+app.use(express.json());
+
 app.listen(3000, () => {
   console.log("Server us running on server http://localhost:3000");
 });
 
+app.use("/api/auth", authRouter);
 app.use("/api/user", userRouter);
