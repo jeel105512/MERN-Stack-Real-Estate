@@ -5,10 +5,6 @@ import { signInStart, signInSuccess, signInFailure } from "../redux/user/userSli
 
 export default function SignIn() {
   const [formData, setFormData] = useState({});
-  /*
-  const [error, setError] = useState(null);
-  const [loading, setLoading] = useState(false);
-  */
   const { loading, error } = useSelector((state) => state.user);
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -26,8 +22,7 @@ export default function SignIn() {
     event.preventDefault();
 
     try {
-      // setLoading(true);
-      dispatch(signInStart);
+      dispatch(signInStart());
       const response = await fetch("/api/auth/sign-in", {
         method: "POST",
         headers: {
@@ -38,25 +33,13 @@ export default function SignIn() {
 
       const data = await response.json();
       if (data.success === false) {
-        /*
-        setError(data.errorMessage); // look the error handler in api index.js
-        setLoading(false);
-        */
         dispatch(signInFailure(data.errorMessage));
         return;
       }
 
-      /*
-      setLoading(false);
-      setError(null);
-      */
       dispatch(signInSuccess(data));
       navigate("/");
     } catch (error) {
-      /*
-      setLoading(false);
-      setError(error.message);
-      */
       dispatch(signInFailure(error.message));
     }
   }
