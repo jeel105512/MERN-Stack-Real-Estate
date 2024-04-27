@@ -16,6 +16,10 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: [true, "You mush provide a password"],
     },
+    avatar: {
+      type: String,
+      default: "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.pngwing.com%2Fen%2Fsearch%3Fq%3Dprofile&psig=AOvVaw1U2hYjedKBxI1QLMfjr4gy&ust=1714325847337000&source=images&cd=vfe&opi=89978449&ved=0CBIQjRxqFwoTCIDg-dL34oUDFQAAAAAdAAAAABAE",
+    },
   },
   { timestamps: true }
 );
