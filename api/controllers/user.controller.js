@@ -31,13 +31,32 @@ export const update = async (req, res, next) => {
       { new: true }
     );
 
-    const {password, ...userInfo} = updatedUser._doc;
+    const { password, ...userInfo } = updatedUser._doc;
 
     res.status(200).json({
       status: 200,
       success: true,
       userInfo,
     });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const remove = async (req, res, next) => {
+  if (req.user.id !== req.params.id)
+    return next(errorHandler(401, "You can only delete your own account!"));
+
+  try {
+    await User.findByIdAndDelete(req.params.id);
+    res.clearCookie("access_token");
+    res
+      .status(200)
+      .json({
+        status: 200,
+        success: true,
+        message: "User has been deleted successfully!",
+      });
   } catch (error) {
     next(error);
   }
