@@ -2,6 +2,7 @@ import { useSelector } from "react-redux"
 import { useEffect, useRef, useState } from "react";
 import { getDownloadURL, getStorage, ref, uploadBytesResumable } from "firebase/storage";
 import { useDispatch } from "react-redux";
+import { Link } from "react-router-dom";
 
 import { app } from "../firebase";
 import { updateUserStart, updateUserSuccess, updateUserFailure, deleteUserStart, deleteUserSuccess, deleteUserFailure, signOutStart, signOutSuccess, signOutFailure, signInFailure } from "../redux/user/userSlice";
@@ -97,7 +98,7 @@ export default function Profile() {
     try {
       const response = await fetch("/api/auth/sign-out");
       const data = await response.json();
-      if(data.success === false) {
+      if (data.success === false) {
         dispatch(signOutFailure(data.errorMessage));
         return;
       }
@@ -128,7 +129,7 @@ export default function Profile() {
         <input onChange={handleChange} type="email" placeholder="email" id="email" className="border p-3 rounded-lg" defaultValue={currentUser.email} />
         <input onChange={handleChange} type="password" placeholder="password" id="password" className="border p-3 rounded-lg" />
         <button disabled={loading} className="bg-slate-700 text-white rounded-lg p-3 uppercase hover:opacity-95 disabled:opacity-80">{loading ? "Loading..." : "Update"}</button>
-
+        <Link to={"/create-Listing"} className="bg-green-700 text-white p-3 rounded-lg uppercase text-center hover:opacity-95">Create Listing</Link>
       </form>
       <div className="flex justify-between mt-5">
         <span onClick={handleDeleteUser} className="text-red-700 cursor-pointer">Delete account</span>
