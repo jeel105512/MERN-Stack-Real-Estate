@@ -27,13 +27,34 @@ export const remove = async (req, res, next) => {
 
   try {
     await Listing.findByIdAndDelete(req.params.id);
-    res
-      .status(200)
-      .json({
-        success: true,
-        status: 200,
-        message: "Listing has been deleted!",
-      });
+    res.status(200).json({
+      success: true,
+      status: 200,
+      message: "Listing has been deleted!",
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const update = async (req, res, next) => {
+  const listing = Listing.findOne(req.params.id);
+  if (!listing) {
+    return next(errorHandler(404, "Listing not found!"));
+  }
+
+  if (req.user.id !== listing.userRef) {
+    return next(errorHandler(401, "You can only update your own lisings!"));
+  }
+
+  try {
+    const updatedListing = await Listing.findByIdAndUpdate(
+      req.params.id,
+      req.body,
+      { new: true }
+    );
+
+    res.status(200).json(updatedListing);
   } catch (error) {
     next(error);
   }
