@@ -9,8 +9,6 @@ router.get("/show/:id", show);
 router.post("/create", varifyToken, create);
 router.post("/update/:id", varifyToken, update);
 router.delete("/delete/:id", varifyToken, remove);
-
-// serch routes
-router.get("/search", search);
+router.get("/search", search); // serch route
 
 export default router;
