@@ -109,7 +109,7 @@ export const search = async (req, res, next) => {
     const sort = req.query.sort || "createdAt";
     const order = req.query.order || "desc";
 
-    const lisings = await Listing.find({
+    const listings = await Listing.find({
       name: { $regex: searchTerm, $options: "i" },
       offer,
       furnished,
@@ -125,7 +125,7 @@ export const search = async (req, res, next) => {
     return res.status(200).json({
       success: true,
       status: 200,
-      lisings,
+      listings,
     });
   } catch (error) {
     next(error);
