@@ -15,6 +15,7 @@ export default function Search() {
     });
     const [loading, setLoading] = useState(false);
     const [listings, setListings] = useState([]);
+    const [showMore, setShowMore] = useState(false);
 
     useEffect(() => {
         const urlParams = new URLSearchParams(location.search);
@@ -40,9 +41,15 @@ export default function Search() {
 
         const fetchListings = async () => {
             setLoading(true);
+            setShowMore(false);
             const searchQuery = urlParams.toString();
             const response = await fetch(`api/listing/search?${searchQuery}`);
             const data = await response.json();
+            if (data.length > 8) {
+                setShowMore(true);
+            } else {
+                setShowMore(false);
+            }
             setListings(data);
             setLoading(false);
         }
@@ -81,6 +88,20 @@ export default function Search() {
         urlParams.set("order", sidebarData.order);
         const searchQuery = urlParams.toString();
         navigate(`/search?${searchQuery}`);
+    }
+
+    const onShowMoreClick = async () => {
+        const numberOfListings = listings.length;
+        const startIndex = numberOfListings;
+        const urlParams = new URLSearchParams(location.search);
+        urlParams.set("startIndex", startIndex);
+        const searchQuery = urlParams.toString();
+        const response = await fetch(`/api/listing/search?${searchQuery}`);
+        const data = await response.json();
+        if (data.listings.length < 9) {
+            setShowMore(false);
+        }
+        setListings([...listings, ...data.listings]);
     }
 
     return (
@@ -139,6 +160,11 @@ export default function Search() {
                     {!loading && listings.length === 0 && (<p className='text-xl text-slate-700'>No listing found!</p>)}
                     {loading && (<p className='text-xl text-slate-700 text-center w-full'>Loading...</p>)}
                     {!loading && listings.listings && listings.listings.map((listing) => <ListingCard key={listing._id} listing={listing} />)}
+                    {showMore && (
+                        <button className='text-green-700 hover:underline p-7 w-full text-center' onClick={onShowMoreClick}>
+                            Show more
+                        </button>
+                    )}
                 </div>
             </div>
         </div>
